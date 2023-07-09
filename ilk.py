@@ -1,3 +1,3 @@
-with open('readme.txt') as f:
+with open('test.txt') as f:
     lines = f.readlines()
 print("lines")
