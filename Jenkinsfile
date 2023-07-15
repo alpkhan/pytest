@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.9').inside {
-                        sh 'python Apply_o_olt.py'
+                        sh 'python Apply_to_olt.py'
                     }
                 }
             }
