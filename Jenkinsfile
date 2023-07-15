@@ -6,18 +6,18 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.9').inside {
-                        sh 'python test.py'
+                        sh 'python Unit_test.py'
                         
                     }
                 }
             }
         }
 
-        stage('Code Control') {
+        stage('Config Control') {
             steps {
                 script {
                     docker.image('python:3.9').inside {
-                        sh 'python control.py'
+                        sh 'python Config_control.py'
                     }
                 }
             }
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.9').inside {
-                        sh 'python depl.py'
+                        sh 'python Apply_o_olt.py'
                     }
                 }
             }
