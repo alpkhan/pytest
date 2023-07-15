@@ -6,8 +6,8 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.9').inside {
-                        sh 'pip install -r requirements.txt'  // If you have any requirements
                         sh 'python test.py'
+                        
                     }
                 }
             }
