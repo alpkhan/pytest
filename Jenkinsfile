@@ -1,38 +1,35 @@
 pipeline {
-    agent none
+    agent any
+
     stages {
-        stage('Unit Test') {
-            agent {
-                docker {
-                    image 'python:3.9' // Replace with your desired Python Docker image
-                }
-            }
+        stage('Test') {
             steps {
-                sh 'pip install -r requirements.txt' // Install dependencies
-                sh 'python unit.py' // Run unit tests
+                script {
+                    docker.image('python:3.9').inside {
+                        sh 'pip install -r requirements.txt'  // If you have any requirements
+                        sh 'python test.py'
+                    }
+                }
             }
         }
 
         stage('Code Control') {
-            agent {
-                docker {
-                    image 'python:3.9' // Replace with your desired Python Docker image
-                }
-            }
             steps {
-                sh 'python code.py' // Perform code control steps
+                script {
+                    docker.image('python:3.9').inside {
+                        sh 'python control.py'
+                    }
+                }
             }
         }
 
         stage('Deployment') {
-            agent {
-                docker {
-                    // Specify the Docker image for deployment if needed
-                }
-            }
             steps {
-                // Deploy the application
-                // Add the deployment steps based on your deployment process
+                script {
+                    docker.image('python:3.9').inside {
+                        sh 'python depl.py'
+                    }
+                }
             }
         }
     }
