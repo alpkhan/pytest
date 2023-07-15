@@ -7,4 +7,4 @@ COPY requirements.txt .
 
 COPY . .
 
-CMD [ "python", "placeholder_script.py" ]
+CMD [ "python", "Script_run.py" ]
