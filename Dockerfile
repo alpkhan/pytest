@@ -1,5 +1,10 @@
-FROM python:3.8-slim-buster 
-WORKDIR /app 
-COPY . . 
+FROM python:3.9
 
-CMD ["python3" , "logistic.py"]
+WORKDIR /app
+
+COPY requirements.txt .
+
+
+COPY . .
+
+CMD [ "python", "placeholder_script.py" ]
