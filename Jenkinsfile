@@ -1,14 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'python:3.9' }
+    }
 
     stages {
         stage('Test') {
             steps {
                 script {
-                    docker.image('python:3.9').inside {
-                        sh 'python Unit_test.py'
+                    sh 'python Unit_test.py'
                         
-                    }
+                    
                 }
             }
         }
