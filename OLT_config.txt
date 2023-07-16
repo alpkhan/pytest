@@ -1,0 +1,163 @@
+#SOME OLT CONFIG .............
+# 
+interface GigabitEthernet1/0/1 
+ undo shutdown 
+ eth-trunk 2 
+# 
+interface Eth-Trunk2.3002 
+ description dT:fitap 
+ user-vlan 8 qinq 3632  //Remove the outer VLAN tag (3632) from upstream packets of the OLT. 
+ bas 
+ # 
+  access-type layer2-subscriber default-domain authentication wlan-fitap 
+  authentication-method bind 
+  ip-trigger 
+  arp-trigger 
+  vpn-instance VPRN1008-WLAN 
+ # 
+#
+# 
+interface GigabitEthernet3/1/3 
+ undo shutdown 
+ eth-trunk 5 
+#
+# 
+interface Eth-Trunk5.6005 
+ control-vid 2005 dot1q-termination 
+ dot1q termination vid 36 
+ ip binding vpn-instance VPRN1008-WLAN 
+ ip address 10.110.0.5 255.255.255.252 
+ arp broadcast enable 
+#
+# 
+static-user 10.0.0.5 10.0.0.5 gateway 10.0.0.1 interface Eth-Trunk5.20 vlan 20 domain-name manager detect 
+# 
+interface Eth-Trunk5.20 
+ description To:JDZXY-AC-manager 
+ user-vlan 20 
+ bas 
+ # 
+  access-type layer2-subscriber default-domain authentication manager 
+  authentication-method bind 
+ # 
+# 
+domain manager 
+  authentication-scheme none 
+  accounting-scheme none 
+  ip-pool manager01 
+# 
+ip pool manager01 bas local 
+ gateway 10.0.0.1 255.255.255.0 
+ section 0 10.0.0.2 10.0.0.254 
+ excluded-ip-address 10.0.0.2 10.0.0.254 
+#
+# 
+interface Eth-Trunk5.5001 
+ pppoe-server bind Virtual-Template 1 
+ description dT:WLAN-FITAP-YeWu 
+ user-vlan 3000 3010 
+ bas 
+ # 
+  access-type layer2-subscriber default-domain pre-authentication pre_mac authentication wlan 
+  nas-port-type 802.11 
+  dhcp session-mismatch action offline 
+  authentication-method ppp web 
+  multicast copy by-session 
+ # 
+# 
+ip pool wlan bas local  // STA ip-pool 
+ gateway 10.100.0.1 255.255.252.0 
+ section 0 10.100.0.2 10.100.3.254 
+ dns-server 8.8.8.8 1.1.1.1 
+ lease 0 0 10 
+# 
+domain default-wlan 
+  authentication-scheme none 
+  accounting-scheme none 
+  ip-pool wlan 
+  mac-authentication enable 
+  user-group wlan 
+# 
+ip pool wlan-fitap01 bas local
+ vpn-instance VPRN1008-WLAN 
+ section 1 10.110.4.2 10.110.7.254 
+ dns-server 8.8.8.8 1.1.1.1 
+#  
+domain wlan-fitap 
+  authentication-scheme none 
+  accounting-scheme none 
+  ip-pool wlan-fitap01 
+  vpn-instance VPRN1008-WLAN 
+  user-group wlan-fitap  
+#
+#
+[global-config]
+  <global-config>
+ dba-profile add profile-id 10 profile-name "dba-profile_10" type3 assure 10240 max 102400
+ ont-srvprofile gpon profile-id 10 profile-name "srv-profile_10"
+  ont-port pots adaptive 32 eth adaptive 8 
+  port vlan eth 1 translation 41 user-vlan 41
+  commit
+ ont-lineprofile gpon profile-id 10 profile-name "line-profile_10"
+  tcont 1 dba-profile-id 10
+  gem add 1 eth tcont 1
+  gem mapping 1 0 vlan 41
+  commit
+  quit
+#
+[vlan-config]
+  <vlan-config>
+ vlan 3632 smart
+ port vlan 3632 0/10 0
+#
+[gpon]
+  <gpon-0/3>
+ interface gpon 0/3
+ port 0 ont-auto-find enable
+ ont add 0 16 sn-auth "48575443000018EE" omci ont-lineprofile-id 10 ont-srvprofile-id 10 desc "48575443000018EE"
+ ont port native-vlan 0 16 eth 1 vlan 41 priority 0  
+#
+[bbs-config]
+  <bbs-config>
+ service-port 1355 vlan 3632 gpon 0/3/0 ont 16 gemport 1 multi-service user-vlan 41 tag-transform translate-and-add inner-vlan 8 inner-priority 0
+#
+#                                                                               
+ sysname AC                                                                     
+#                                                                               
+vlan batch 20 36 3000 to 3010         
+#                                                                               
+vlan pool server_vlan                                                           
+ vlan 3000 to 3010                                                              
+#                                                                               
+interface Vlanif20                                                              
+ ip address 10.0.0.5 255.255.255.0                                              
+#                                                                               
+interface Vlanif36                                                              
+ ip address 10.110.0.6 255.255.255.0                                            
+#                                                                               
+interface GigabitEthernet0/0/1                                                  
+ port link-type trunk                                                           
+ undo port trunk allow-pass vlan 1                                              
+ port trunk allow-pass vlan 20 36 3000 to 3010                        
+#                                                                               
+ip route-static 0.0.0.0 0.0.0.0 10.110.0.5                                      
+#                                                                               
+wlan
+ security-profile name wlan-net
+  security open
+ ssid-profile name wlan-net
+  ssid wlan-net
+ vap-profile name wlan-net
+  forward-mode tunnel
+  service-vlan vlan-pool server_vlan
+  ssid-profile wlan-net
+  security-profile wlan-net
+ regulatory-domain-profile name default
+ ap-group name ap-group1
+  radio 0
+   vap-profile wlan-net wlan 1
+  radio 1
+   vap-profile wlan-net wlan 1
+ ap-id 0 type-id 110 ap-mac 60de-4476-e360 ap-sn 210235554710CB000042
+  ap-name area_1
+  ap-group ap-group   
