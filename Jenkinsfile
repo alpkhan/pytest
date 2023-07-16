@@ -17,9 +17,8 @@ pipeline {
         stage('Config Control') {
             steps {
                 script {
-                    docker.image('python:3.9').inside {
-                        sh 'python Config_control.py'
-                    }
+                    sh 'python Config_control.py'
+                    
                 }
             }
         }
@@ -27,9 +26,8 @@ pipeline {
         stage('Deployment') {
             steps {
                 script {
-                    docker.image('python:3.9').inside {
-                        sh 'python Apply_to_olt.py'
-                    }
+                    sh 'python Apply_to_olt.py'
+                    
                 }
             }
         }
