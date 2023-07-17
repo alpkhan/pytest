@@ -8,7 +8,6 @@ commit
 quit
 ont-srvprofile gpon profile-id
 ont-port eth adaptive pots adaptive
-port vlan eth 1 300
 commit
 quit
 interface gpon 0/3
