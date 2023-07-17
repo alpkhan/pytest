@@ -1,0 +1,3 @@
+ont-lineprofile gpon profile-id 10
+ont-srvprofile gpon profile-id 11
+ont add 1 ontid 1 sn-auth 32303131b39fd641 omci ont-lineprofile-id 10 ont-srvprofile-id 11
