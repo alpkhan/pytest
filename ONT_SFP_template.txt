@@ -11,6 +11,6 @@ ont-port eth adaptive pots adaptive
 port vlan eth 1 300
 commit
 quit
-interface gpon 0/
+interface gpon 0/3
 ont port native-vlan 1 1 eth 1 vlan 300
-ont add 1 ontid 1 sn-auth  omci ont-lineprofile-id  ont-srvprofile-id 
+ont add 1 ontid 1 sn-auth omci ont-lineprofile-id  ont-srvprofile-id 

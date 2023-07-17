@@ -1,6 +1,5 @@
 import sys
 
-
 with open("Config_change_request.txt") as f:
     lines = f.readlines()
 with open("ONT_SFP_template.txt") as f:

@@ -7,7 +7,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh 'python Unit_test.py'
+                    sh 'python Create_config.py'
                         
                     
                 }
