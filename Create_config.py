@@ -1,4 +1,4 @@
-with open("Config_entry.txt") as f:
+with open("config_entry.txt") as f:
     lines = f.readlines()
 with open("Config_change_request.txt") as f:
     template = f.readlines()
