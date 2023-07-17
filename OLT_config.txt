@@ -160,4 +160,7 @@ wlan
    vap-profile wlan-net wlan 1
  ap-id 0 type-id 110 ap-mac 60de-4476-e360 ap-sn 210235554710CB000042
   ap-name area_1
-  ap-group ap-group   
+  ap-group ap-group   enable
+
+
+
