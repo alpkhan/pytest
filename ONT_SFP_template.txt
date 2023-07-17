@@ -1,16 +1,16 @@
 enable
 config
-ont-lineprofile gpon profile-id VAR
-tcont 4 dba-profile-id VAR
+ont-lineprofile gpon profile-id
+tcont 4 dba-profile-id
 gem add 12 eth tcont 4 cascade on
 gem mapping 12 1 vlan 300
 commit
 quit
-ont-srvprofile gpon profile-id VAR
+ont-srvprofile gpon profile-id
 ont-port eth adaptive pots adaptive
 port vlan eth 1 300
 commit
 quit
-interface gpon 0/VAR
+interface gpon 0/
 ont port native-vlan 1 1 eth 1 vlan 300
-ont add 1 ontid 1 sn-auth VAR omci ont-lineprofile-id VAR ont-srvprofile-id VAR
+ont add 1 ontid 1 sn-auth  omci ont-lineprofile-id  ont-srvprofile-id 
